@@ -1,4 +1,4 @@
-package com.samples.paymentservice.rest;
+package com.samples.paymentservice.rest.converter;
 
 import com.samples.paymentservice.rest.controller.CardController;
 import com.samples.paymentservice.rest.model.CardModel;
@@ -15,9 +15,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @Component
 public class CardModelAssembler implements RepresentationModelAssembler<CardModel, EntityModel<CardModel>> {
+
     @Override
     public EntityModel<CardModel> toModel(CardModel cardModel) {
-        return EntityModel.of(cardModel, linkTo(methodOn(CardController.class).findById(cardModel.getId())).withSelfRel(),
+        return EntityModel.of(cardModel, linkTo(methodOn(CardController.class).findByPan(cardModel.getPan())).withSelfRel(),
                 linkTo(methodOn(CardController.class).all()).withRel("cards"));
     }
 }

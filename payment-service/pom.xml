@@ -17,6 +17,8 @@
     <properties>
         <java.version>1.8</java.version>
         <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+        <wiremock.version>2.27.2</wiremock.version>
+        <activeProfile>dev</activeProfile>
     </properties>
 
     <dependencies>
@@ -40,6 +42,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.2.5.RELEASE</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -77,7 +87,14 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.64</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>2.27.2</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -108,5 +125,15 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <!--				<activeProfile>prod</activeProfile>-->
+                <!--this must be prod. but now I comment it. so we can test it in release profile-->
+                <activeProfile>dev</activeProfile>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

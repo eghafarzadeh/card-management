@@ -1,7 +1,9 @@
 package com.samples.paymentservice.service;
 
 import com.samples.paymentservice.persistance.entity.Card;
+import com.samples.paymentservice.persistance.entity.Transaction;
 import com.samples.paymentservice.service.dto.CardDto;
+import com.samples.paymentservice.service.dto.TransactionDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -13,5 +15,11 @@ public interface ModelConverter {
 
     Card convert(CardDto cardDto);
 
-    List<CardDto> convert(List<Card> cards);
+    List<CardDto> convertCardsToCardDtos(List<Card> cards);
+
+    Transaction convert(TransactionDto transactionDto);
+
+    TransactionDto convert(Transaction transaction);
+
+    List<TransactionDto> convertTransactionsToTransactionDtos(List<Transaction> transactions);
 }

@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Elham
@@ -26,6 +25,10 @@ public class UserDto implements UserDetails {
         return user.getUsername();
     }
 
+    public Long getUserId() {
+        return user.getId();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -33,8 +36,7 @@ public class UserDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("User"));
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority("User"));
     }
 
     @Override
@@ -55,11 +57,5 @@ public class UserDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    //
-
-    public User getAppUser() {
-        return user;
     }
 }

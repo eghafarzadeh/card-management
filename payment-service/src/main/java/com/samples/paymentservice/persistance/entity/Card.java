@@ -1,10 +1,7 @@
 package com.samples.paymentservice.persistance.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,6 +16,7 @@ import javax.persistence.*;
                 @Index(name = "PAN", columnList = "PAN")
         }
 )
+//@NamedQuery(name = "Card.findByUserIdAndPan", query = "SELECT c FROM Card c WHERE c.user.id= ?1 And c.pan = ?2")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,12 +27,13 @@ public class Card {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "PAN", nullable = false)
+    @Column(name = "PAN", nullable = false, updatable = false)
     private String pan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private User user;
 }

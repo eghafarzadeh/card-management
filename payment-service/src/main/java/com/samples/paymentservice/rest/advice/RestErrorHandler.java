@@ -1,7 +1,7 @@
-package com.sample.cardmanagement.rest.advice;
+package com.samples.paymentservice.rest.advice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.samples.paymentservice.exception.CardNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +20,13 @@ import java.util.List;
  * @since 9/27/2020
  */
 @ControllerAdvice
+@Slf4j
 public class RestErrorHandler {
-    /*todo: must add proper messages and http status codes here*/
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestErrorHandler.class);
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public Error methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        LOGGER.error(ex.getMessage(), ex);
+        log.error(ex.getMessage(), ex);
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         return processFieldErrors(fieldErrors);
@@ -41,11 +40,20 @@ public class RestErrorHandler {
         return error;
     }
 
+
+    @ExceptionHandler({CardNotFoundException.class, EntityNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public Error handleEntityNotFound(final EntityNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return new Error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
     @ExceptionHandler({Throwable.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public Error handleThrowable(final Throwable ex) {
-        LOGGER.error(ex.getMessage(), ex);
+        log.error(ex.getMessage(), ex);
         return new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
     }
 

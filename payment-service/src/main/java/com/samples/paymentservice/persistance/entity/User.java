@@ -1,13 +1,8 @@
 package com.samples.paymentservice.persistance.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -68,9 +63,10 @@ public class User {
     @Column(name = "CREATION_DATE", updatable = false)
     private Date creationDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.JOIN)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(value = FetchMode.JOIN)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 }

@@ -1,8 +1,13 @@
 package com.samples.paymentservice.rest.controller;
 
-import com.samples.paymentservice.rest.CardModelAssembler;
-import com.samples.paymentservice.rest.RestModelConverter;
+import com.samples.paymentservice.rest.converter.CardModelAssembler;
+import com.samples.paymentservice.rest.converter.RestModelConverter;
 import com.samples.paymentservice.rest.model.CardModel;
+import com.samples.paymentservice.rest.model.CardTransferRequestModel;
+import com.samples.paymentservice.rest.model.TransactionModel;
+import com.samples.paymentservice.util.ContextUtil;
+import com.samples.paymentservice.service.Context;
+import com.samples.paymentservice.service.dto.CardTransferDto;
 import com.samples.paymentservice.service.inf.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -41,7 +46,8 @@ public class CardController {
 
     @GetMapping("")
     public CollectionModel<EntityModel<CardModel>> all() {
-        List<CardModel> cardModels = modelConverter.convert(cardService.findAll());
+        Context context = ContextUtil.getContext();
+        List<CardModel> cardModels = modelConverter.convertCardDtosToCardModels(cardService.findAll(context));
         if (cardModels == null) {
             return null;
         }
@@ -50,15 +56,17 @@ public class CardController {
         return CollectionModel.of(cards, linkTo(methodOn(CardController.class).all()).withSelfRel());
     }
 
-    @GetMapping("/{id}")
-    public EntityModel<CardModel> findById(@PathVariable Long id) {
-        return cardModelAssembler.toModel(modelConverter.convert(cardService.findById(id)));
+    @GetMapping("/{pan}")
+    public EntityModel<CardModel> findByPan(@PathVariable String pan) {
+        Context context = ContextUtil.getContext();
+        return cardModelAssembler.toModel(modelConverter.convert(cardService.findByPan(context, pan)));
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EntityModel<CardModel>> addCard(@Valid @RequestBody CardModel newCard) {
-        EntityModel<CardModel> entityModel = cardModelAssembler.toModel(modelConverter.convert(cardService.addCard(modelConverter.convert(newCard))));
+        Context context = ContextUtil.getContext();
+        EntityModel<CardModel> entityModel = cardModelAssembler.toModel(modelConverter.convert(cardService.addCard(context, modelConverter.convert(newCard))));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
@@ -68,7 +76,8 @@ public class CardController {
     @PutMapping("")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EntityModel<CardModel>> updateCard(@Valid @RequestBody CardModel card) {
-        EntityModel<CardModel> entityModel = cardModelAssembler.toModel(modelConverter.convert(cardService.updateCard(modelConverter.convert(card))));
+        Context context = ContextUtil.getContext();
+        EntityModel<CardModel> entityModel = cardModelAssembler.toModel(modelConverter.convert(cardService.updateCard(context, modelConverter.convert(card))));
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
@@ -76,8 +85,17 @@ public class CardController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
-        cardService.deleteById(id);
+        Context context = ContextUtil.getContext();
+        cardService.deleteById(context, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/transfer")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TransactionModel transfer(@Valid @RequestBody CardTransferRequestModel cardTransferRequestModel) {
+        Context context = ContextUtil.getContext();
+        CardTransferDto cardTransferDto = modelConverter.convert(cardTransferRequestModel);
+        return modelConverter.convert(cardService.cardToCardTransfer(context, cardTransferDto));
     }
 
 }

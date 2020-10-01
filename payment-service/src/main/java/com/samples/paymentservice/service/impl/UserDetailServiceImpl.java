@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    @Autowired
     private final UserJpaRepository userRepository;
 
+    @Autowired
     public UserDetailServiceImpl(UserJpaRepository userRepository) {
         this.userRepository = userRepository;
     }
