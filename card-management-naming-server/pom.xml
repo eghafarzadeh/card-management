@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+		<activeProfile>dev</activeProfile>
 	</properties>
 
 	<dependencies>
@@ -42,6 +43,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -64,5 +71,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<properties>
+<!--				<activeProfile>prod</activeProfile>-->
+				<!--this must be prod. but now I comment it. so we can test it in release profile-->
+				<activeProfile>dev</activeProfile>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>
