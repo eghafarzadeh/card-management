@@ -1,6 +1,5 @@
 package com.samples.paymentservice.service.inf;
 
-import com.samples.paymentservice.persistance.entity.Transaction;
 import com.samples.paymentservice.service.Context;
 import com.samples.paymentservice.service.dto.CardDto;
 import com.samples.paymentservice.service.dto.CardTransferDto;

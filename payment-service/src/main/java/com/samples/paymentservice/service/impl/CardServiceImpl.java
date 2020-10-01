@@ -31,12 +31,14 @@ public class CardServiceImpl implements CardService {
     private final TransactionJpaRepository transactionRepository;
     private final ModelConverter modelConverter;
     private final PaymentClientFactory paymentClientFactory;
+    private final ProducerService producerService;
 
-    public CardServiceImpl(CardJpaRepository cardRepository, TransactionJpaRepository transactionRepository, ModelConverter modelConverter, PaymentClientFactory paymentClientFactory) {
+    public CardServiceImpl(CardJpaRepository cardRepository, TransactionJpaRepository transactionRepository, ModelConverter modelConverter, PaymentClientFactory paymentClientFactory, ProducerService producerService) {
         this.cardRepository = cardRepository;
         this.transactionRepository = transactionRepository;
         this.modelConverter = modelConverter;
         this.paymentClientFactory = paymentClientFactory;
+        this.producerService = producerService;
     }
 
     @Override
@@ -81,8 +83,6 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public TransactionDto cardToCardTransfer(Context context, CardTransferDto cardTransferDto) {
-        /*1- check if card is in user card list
-         * 2- get source pan and choose provider*/
         Optional<Card> cardOptional = cardRepository.findByUserIdAndPan(context.getUserId(), cardTransferDto.getCardAuthenticationInfo().getPan());
         if (!cardOptional.isPresent()) {
             throw new CardAndUserNotRelatedException("Card doesn't include in user's cards");
@@ -93,6 +93,8 @@ public class CardServiceImpl implements CardService {
         User user = new User();
         user.setId(context.getUserId());
         transaction.setUser(user);
-        return modelConverter.convert(transactionRepository.save(transaction));
+        transaction = transactionRepository.save(transaction);
+        producerService.sendMessage("transfer from " + transaction.getSource() + " to " + transaction.getDestination() + " with amount " + transaction.getAmount());
+        return modelConverter.convert(transaction);
     }
 }
