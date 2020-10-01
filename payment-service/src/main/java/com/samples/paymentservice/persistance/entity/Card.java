@@ -16,14 +16,13 @@ import javax.persistence.*;
                 @Index(name = "PAN", columnList = "PAN")
         }
 )
-//@NamedQuery(name = "Card.findByUserIdAndPan", query = "SELECT c FROM Card c WHERE c.user.id= ?1 And c.pan = ?2")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARD_SEQ")
-    @SequenceGenerator(sequenceName = "card_seq", allocationSize = 1, name = "CARD_SEQ")
+    @SequenceGenerator(sequenceName = "card_seq", allocationSize = 1, initialValue = 100, name = "CARD_SEQ")
     @Column(name = "ID", nullable = false)
     private Long id;
 

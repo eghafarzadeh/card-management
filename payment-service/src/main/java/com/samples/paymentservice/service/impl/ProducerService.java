@@ -18,7 +18,7 @@ public class ProducerService {
     private static final Logger logger = LoggerFactory.getLogger(ProducerService.class);
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final String TOPIC = "kafkaTopic";
+    private final String TOPIC = "paymentNotificationsTopic";
 
     public ProducerService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;

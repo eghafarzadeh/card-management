@@ -1,5 +1,6 @@
 package com.samples.paymentservice.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samples.paymentservice.exception.CardAndUserNotRelatedException;
 import com.samples.paymentservice.exception.CardNotFoundException;
 import com.samples.paymentservice.persistance.entity.Card;
@@ -11,10 +12,12 @@ import com.samples.paymentservice.service.Context;
 import com.samples.paymentservice.service.ModelConverter;
 import com.samples.paymentservice.service.dto.CardDto;
 import com.samples.paymentservice.service.dto.CardTransferDto;
+import com.samples.paymentservice.service.dto.NotificationDto;
 import com.samples.paymentservice.service.dto.TransactionDto;
 import com.samples.paymentservice.service.inf.CardService;
 import com.samples.paymentservice.service.inf.PaymentClient;
 import com.samples.paymentservice.service.inf.PaymentClientFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.Optional;
  * @since 9/29/2020
  */
 @Service
+@Slf4j
 public class CardServiceImpl implements CardService {
 
     private final CardJpaRepository cardRepository;
@@ -93,8 +97,16 @@ public class CardServiceImpl implements CardService {
         User user = new User();
         user.setId(context.getUserId());
         transaction.setUser(user);
-        transaction = transactionRepository.save(transaction);
-        producerService.sendMessage("transfer from " + transaction.getSource() + " to " + transaction.getDestination() + " with amount " + transaction.getAmount());
+        try {
+            transaction = transactionRepository.save(transaction);
+            NotificationDto notificationDto = new NotificationDto();
+            notificationDto.setMobileNumber(transaction.getUser().getMobileNumber());
+            notificationDto.setMessage("transfer from " + transaction.getSource() + " to " + transaction.getDestination() + " with amount " + transaction.getAmount());
+            ObjectMapper objectMapper = new ObjectMapper();
+            producerService.sendMessage(objectMapper.writeValueAsString(notificationDto));
+        } catch (Exception e) {
+            log.error("Exception in sending message to broker. Exception message is: " + e.getMessage());
+        }
         return modelConverter.convert(transaction);
     }
 }
