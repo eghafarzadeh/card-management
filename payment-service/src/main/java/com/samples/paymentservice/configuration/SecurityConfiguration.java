@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
@@ -24,11 +25,11 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final UserDetailServiceImpl userDetailService;
+    private final UserDetailsService userDetailService;
     private final UserDetailsPasswordService userDetailsPasswordService;
 
     public SecurityConfiguration(
-            UserDetailServiceImpl userDetailService,
+            @Qualifier("UserDetailServiceImpl") UserDetailsService userDetailService,
             @Qualifier("UserDetailPasswordServiceImpl") UserDetailsPasswordService userDetailsPasswordService) {
         this.userDetailService = userDetailService;
         this.userDetailsPasswordService = userDetailsPasswordService;
@@ -64,7 +65,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        System.out.println(passwordEncoder().encode("password"));
         provider.setUserDetailsPasswordService(this.userDetailsPasswordService);
         provider.setUserDetailsService(this.userDetailService);
         return provider;

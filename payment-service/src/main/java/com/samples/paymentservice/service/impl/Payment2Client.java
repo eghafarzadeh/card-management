@@ -41,7 +41,7 @@ public class Payment2Client implements PaymentClient {
             if (transactionResult.getSource() == null) {
                 transactionResult.setSource(cardTransferDto.getCardAuthenticationInfo().getPan());
             }
-            transactionResult.setPaymentClientName(PaymentClientName.PAYMENT1);
+            transactionResult.setPaymentClientName(PaymentClientName.PAYMENT2);
         }
         return transactionResult;
     }

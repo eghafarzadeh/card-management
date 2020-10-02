@@ -5,10 +5,10 @@ import com.samples.paymentservice.rest.converter.RestModelConverter;
 import com.samples.paymentservice.rest.model.CardModel;
 import com.samples.paymentservice.rest.model.CardTransferRequestModel;
 import com.samples.paymentservice.rest.model.TransactionModel;
-import com.samples.paymentservice.util.ContextUtil;
 import com.samples.paymentservice.service.Context;
 import com.samples.paymentservice.service.dto.CardTransferDto;
 import com.samples.paymentservice.service.inf.CardService;
+import com.samples.paymentservice.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -73,7 +73,7 @@ public class CardController {
 
     }
 
-    @PutMapping("")
+  /*  @PutMapping("")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EntityModel<CardModel>> updateCard(@Valid @RequestBody CardModel card) {
         Context context = ContextUtil.getContext();
@@ -81,7 +81,7 @@ public class CardController {
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable Long id) {

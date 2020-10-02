@@ -18,8 +18,10 @@ import com.samples.paymentservice.service.inf.CardService;
 import com.samples.paymentservice.service.inf.PaymentClient;
 import com.samples.paymentservice.service.inf.PaymentClientFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,8 +83,12 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void deleteById(Context context, Long id) {
-        /* todo */
-        cardRepository.deleteById(id);
+        /* todo. delete logically or physically? */
+        try {
+            cardRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntityNotFoundException(ex.getMessage());
+        }
     }
 
     @Override

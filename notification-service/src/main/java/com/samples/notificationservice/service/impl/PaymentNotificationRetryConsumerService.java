@@ -1,5 +1,6 @@
 package com.samples.notificationservice.service.impl;
 
+import com.samples.notificationservice.service.inf.ConsumerService;
 import com.samples.notificationservice.service.inf.PaymentNotificationClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,7 +13,7 @@ import org.springframework.web.client.RestClientException;
  */
 @Service
 @Slf4j
-public class PaymentNotificationRetryConsumerService {
+public class PaymentNotificationRetryConsumerService implements ConsumerService {
 
     private final PaymentNotificationClient paymentNotificationClient;
     private final RetryTopicProducerService retryTopicProducerService;
@@ -22,12 +23,17 @@ public class PaymentNotificationRetryConsumerService {
         this.retryTopicProducerService = retryTopicProducerService;
     }
 
-    @KafkaListener(topics = "paymentNotificationsRetryTopic", groupId = "payment-notifications")
-    public void consume(String message) throws InterruptedException {
+    @Override
+    @KafkaListener(topics = RetryTopicProducerService.TOPIC, groupId = "payment-notifications")
+    public void consume(String message) {
         try {
             paymentNotificationClient.processMessage(message);
         } catch (RestClientException e) {
-            Thread.sleep(30000); // 5 min
+            try {
+                Thread.sleep(300000); // 5 min
+            } catch (InterruptedException ex) {
+                log.info(ex.getMessage());
+            }
             publishToRetryTopic(message);
         }
         log.info(String.format("$$$$ => Consumed message: %s", message));

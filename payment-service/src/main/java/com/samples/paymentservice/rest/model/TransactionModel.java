@@ -1,5 +1,6 @@
 package com.samples.paymentservice.rest.model;
 
+import com.samples.paymentservice.persistance.entity.PaymentClientName;
 import com.samples.paymentservice.persistance.entity.TransactionStatus;
 import lombok.Data;
 
@@ -18,4 +19,5 @@ public class TransactionModel {
     private String destination;
     private BigDecimal amount;
     private TransactionStatus status;
+    private PaymentClientName paymentClientName;
 }
