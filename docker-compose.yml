@@ -1,0 +1,29 @@
+version: '3'
+services:
+  card-namangement-naming-server:
+    image: eghafarzadeh/card-namangement-naming-server
+    ports:
+      - "8761:8761"
+
+  payment-service:
+    image: eghafarzadeh/payment-service
+    ports:
+      - "8100:8100"
+
+  notification-service:
+    image: eghafarzadeh/notification-service
+    ports:
+      - "8100:8100"
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: $CF_HOST_IP
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
