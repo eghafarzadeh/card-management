@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "f996feeb-0e24-43d7-a568-f52905ffc53f",
+		"name": "cardManagement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAllCards",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": \"1\",\"pan\":\"6037123412341234\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/card",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"card"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add card",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": \"2\",\"pan\":\"6037123412341234\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/card",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"card"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete card",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": \"2\",\"pan\":\"6037123412341234\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/card/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"card",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "card to card-payment1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"cardId\": \"1\",\r\n\"amount\": 1000,\r\n\"destinationPan\": \"1234123412341232\",\r\n\"cardAuthenticationInfo\": {\r\n    \"pan\": \"6037123412341234\",\r\n \"cvv2\": \"1234\",\r\n\"expYear\": \"01\",\r\n\"expMonth\": \"01\"\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/card/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"card",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "card to card - payment 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"cardId\": \"1\",\r\n\"amount\": 1000,\r\n\"destinationPan\": \"1234123412341232\",\r\n\"cardAuthenticationInfo\": {\r\n    \"pan\": \"1234123412341234\",\r\n \"cvv2\": \"1234\",\r\n\"expYear\": \"01\",\r\n\"expMonth\": \"01\"\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/card/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"card",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction report",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZS5naGFmYXJ6YWRlaDpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"cardId\": \"1\",\r\n\"amount\": 1000,\r\n\"destinationPan\": \"1234123412341232\",\r\n\"cardAuthenticationInfo\": {\r\n    \"pan\": \"1234123412341232\",\r\n \"cvv2\": \"1234\",\r\n\"expYear\": \"01\",\r\n\"expMonth\": \"01\"\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8100/api/transaction/2000-10-31T01:30:00.000-05:00/2020-10-31T01:30:00.000-05:00",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"api",
+						"transaction",
+						"2000-10-31T01:30:00.000-05:00",
+						"2020-10-31T01:30:00.000-05:00"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
